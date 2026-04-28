@@ -529,9 +529,15 @@
                         <ProjectModal project={activeProject} onClose={() => setActiveProject(null)} />
                     )}
                     
-                    <div className="absolute top-0 left-0 w-full z-40 px-4 py-6 md:px-12 md:py-8 pointer-events-none mix-blend-difference text-white">
-                        <span className="text-xl font-bold tracking-tighter uppercase interactive-text pointer-events-auto">JT—</span>
-                    </div>
+                    <div className="absolute top-0 left-0 w-full z-40 px-4 py-6 md:px-12 md:py-8 pointer-events-none mix-blend-difference text-white flex items-center">
+    <svg 
+        viewBox="0 0 540 703" 
+        className="h-5 md:h-6 w-auto interactive-text pointer-events-auto fill-current" 
+        xmlns="http://www.w3.org/2000/svg"
+    >
+        <path d="M495.72 421.56C466.78 395.64 424.87 382.67 370 382.67H245.98V256.86H468.75V212.05H357.53V40.48L498.58 40.43V101.4H539.14V0H130.77V101.4H171.33V40.42H312.77V212.05H201.54V382.67H43.8V326.79H0V524.63H43.8V431H370C406.75 431 436.83 438.81 460.23 454.41C483.64 470.02 495.34 497.96 495.34 538.23C495.34 578.5 483.64 606.7 460.23 625.82C436.82 644.96 406.75 654.51 370 654.51H333V702.84H370C424.87 702.84 466.78 688.12 495.72 658.67C524.67 629.22 539.14 589.33 539.14 538.99C539.14 488.65 524.67 447.51 495.72 421.57V421.56Z" />
+    </svg>
+</div>
 
                     <nav className="fixed top-0 right-0 z-50 px-4 py-6 md:px-12 md:py-8 mix-blend-difference text-white pointer-events-none">
                         <div className="flex flex-col text-right gap-1 text-[10px] uppercase tracking-widest pointer-events-auto">
@@ -638,7 +644,9 @@
                             </div>
 
                             <p className="text-sm uppercase tracking-widest text-neutral-500 mb-8">Trabajemos juntos</p>
-                            <a href="mailto:trinchjordan@gmail.com" className="project-card-trigger text-[10vw] md:text-[5.5vw] leading-none font-bold text-white hover:text-neutral-400 transition-colors break-all">TRINCHJORDAN@GMAIL.COM</a>
+                            <a href="mailto:graficojordan@gmail.com" className="project-card-trigger text-[10vw] md:text-[5.5vw] leading-[0.9] md:leading-none font-bold text-white hover:text-neutral-400 transition-colors block uppercase">
+    graficojordan<br className="md:hidden" />@gmail.com
+</a>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mt-12 md:mt-24">
                             <div>
