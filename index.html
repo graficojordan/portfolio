@@ -35,7 +35,7 @@
             cursor: none; 
         }
 
-        a, button, .interactive-trigger, .project-card-trigger {
+        a, button, .interactive-trigger, .project-card-trigger, .archive-item {
             cursor: none !important;
         }
         
@@ -74,6 +74,12 @@
         .interactive-text { cursor: none; }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         .spin-text { animation: spin 10s linear infinite; }
+
+        /* FIX MOBILE: Ocultar custom cursor en dispositivos touch */
+        @media (pointer: coarse) {
+            .custom-cursor { display: none !important; }
+            body, a, button, .interactive-trigger, .project-card-trigger, .archive-item, iframe { cursor: auto !important; }
+        }
     </style>
 </head>
 <body>
@@ -191,7 +197,10 @@
                                 key={i}
                                 className={`inline-block ${className}`}
                                 variants={{
-                                    hidden: { opacity: 0, filter: 'blur(20px)', x: dx, y: dy, scale: 0.2 },
+                                    hidden: { 
+                                        opacity: 0, filter: 'blur(20px)', x: dx, y: dy, scale: 0.2,
+                                        transition: { duration: 0.8, ease: "easeOut" } // FIX: Transición de salida más suave
+                                    },
                                     visible: { 
                                         opacity: 1, filter: 'blur(0px)', x: 0, y: 0, scale: 1,
                                         transition: { duration: 1.2, ease: [0.22, 1, 0.36, 1], delay: delayOffset + (i * 0.05) }
@@ -302,6 +311,13 @@
         };
 
         const ProjectCard = ({ project, index, onClick }) => {
+            const [isTouch, setIsTouch] = useState(false);
+
+            useEffect(() => {
+                // Detecta si es un dispositivo touch al cargar
+                setIsTouch(window.matchMedia("(pointer: coarse)").matches);
+            }, []);
+
             const imageUrl = project.image.includes('unsplash') 
                 ? `${project.image}&w=800&q=80` 
                 : project.image;
@@ -324,14 +340,15 @@
                     className="project-card-trigger group relative w-full aspect-[4/5] overflow-hidden bg-neutral-900 border border-neutral-900 hover:border-neutral-700 transition-colors"
                 >
                     <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500 z-10"></div>
+                    {/* FIX: Se separa la lógica Framer Motion para mobile vs Tailwind hover puro para desktop */}
                     <motion.img 
                         src={imageUrl} 
                         alt={project.title} 
                         loading="lazy"
-                        initial={{ filter: "grayscale(100%)" }}
-                        whileInView={{ filter: "grayscale(0%)" }}
-                        viewport={{ margin: "-25% 0px -25% 0px", once: false }}
-                        className="w-full h-full object-cover md:!filter-none md:grayscale md:group-hover:grayscale-0 scale-100 group-hover:scale-105 transition-all duration-700 ease-out"
+                        initial={isTouch ? { filter: "grayscale(100%)" } : {}}
+                        whileInView={isTouch ? { filter: "grayscale(0%)" } : {}}
+                        viewport={{ margin: "-35% 0px -35% 0px", once: false }}
+                        className={`w-full h-full object-cover scale-100 group-hover:scale-105 transition-all duration-700 ease-out ${!isTouch ? 'grayscale group-hover:grayscale-0' : ''}`}
                     />
                     <div className="absolute bottom-0 left-0 w-full p-6 z-20 translate-y-4 group-hover:translate-y-0 transition-transform duration-500 bg-gradient-to-t from-black/80 to-transparent">
                         <div className="flex justify-between items-end overflow-hidden">
@@ -425,7 +442,6 @@
             const [expandedArchiveIndex, setExpandedArchiveIndex] = useState(null);
             const [fullscreenImage, setFullscreenImage] = useState(null);
 
-            // Efecto global para manejar el scroll y evitar que se freezee la vista
             useEffect(() => {
                 if (activeProject || fullscreenImage) {
                     document.body.style.overflow = 'hidden';
@@ -499,12 +515,10 @@
                         <ProjectModal project={activeProject} onClose={() => setActiveProject(null)} />
                     )}
                     
-                    {/* Header Independiente: Logo absoluto (scrollea) */}
                     <div className="absolute top-0 left-0 w-full z-40 px-4 py-6 md:px-12 md:py-8 pointer-events-none mix-blend-difference text-white">
                         <span className="text-xl font-bold tracking-tighter uppercase interactive-text pointer-events-auto">JT—</span>
                     </div>
 
-                    {/* Header Independiente: Navegación fija */}
                     <nav className="fixed top-0 right-0 z-50 px-4 py-6 md:px-12 md:py-8 mix-blend-difference text-white pointer-events-none">
                         <div className="flex flex-col text-right gap-1 text-[10px] uppercase tracking-widest pointer-events-auto">
                             <a href="#work" className="hover:text-neutral-400 transition-colors project-card-trigger">Proyectos</a>
