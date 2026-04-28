@@ -44,9 +44,21 @@
         ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #555; }
 
-        .marquee-container { overflow: hidden; white-space: nowrap; }
-        .marquee-content { display: inline-block; animation: marquee 40s linear infinite; }
-        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        .marquee-container { 
+            display: flex;
+            overflow: hidden; 
+            white-space: nowrap; 
+            width: 100vw;
+        }
+        .marquee-content { 
+            flex-shrink: 0;
+            display: flex; 
+            animation: marquee 25s linear infinite; 
+        }
+        @keyframes marquee { 
+            0% { transform: translateX(0); } 
+            100% { transform: translateX(-50%); } 
+        }
 
         .custom-cursor { 
             mix-blend-mode: difference; 
@@ -139,11 +151,7 @@
                 <motion.div
                     className="custom-cursor"
                     style={{ x, y }}
-                    animate={{
-                        width: isHovering ? 64 : 16,
-                        height: isHovering ? 64 : 16,
-                        opacity: 1
-                    }}
+                    animate={{ width: isHovering ? 64 : 16, height: isHovering ? 64 : 16, opacity: 1 }}
                     transition={{ type: "spring", stiffness: 500, damping: 28, mass: 0.5 }}
                 />
             );
@@ -163,7 +171,6 @@
             </div>
         );
 
-        // --- EFECTO DE NEBULOSA DE TEXTO (REEMPLAZO DEL STROKE) ---
         const NebulaText = ({ text, justify = "justify-start", className = "", delayOffset = 0 }) => {
             const chars = text.split("");
 
@@ -176,7 +183,6 @@
                     className={`flex ${justify} w-full interactive-trigger`}
                 >
                     {chars.map((char, i) => {
-                        // Cálculo paramétrico para mantener la dispersión constante y fluida
                         const dx = Math.sin((i + 1) * 1.2) * 120; 
                         const dy = Math.cos((i + 1) * 1.5) * 120;
                         
@@ -187,19 +193,11 @@
                                 variants={{
                                     hidden: { opacity: 0, filter: 'blur(20px)', x: dx, y: dy, scale: 0.2 },
                                     visible: { 
-                                        opacity: 1, 
-                                        filter: 'blur(0px)', 
-                                        x: 0, 
-                                        y: 0, 
-                                        scale: 1,
+                                        opacity: 1, filter: 'blur(0px)', x: 0, y: 0, scale: 1,
                                         transition: { duration: 1.2, ease: [0.22, 1, 0.36, 1], delay: delayOffset + (i * 0.05) }
                                     },
                                     hover: { 
-                                        opacity: 0.5, 
-                                        filter: 'blur(8px)', 
-                                        x: dx * 0.15, 
-                                        y: dy * 0.15, 
-                                        scale: 1.05,
+                                        opacity: 0.5, filter: 'blur(8px)', x: dx * 0.15, y: dy * 0.15, scale: 1.05,
                                         transition: { duration: 0.4, ease: "easeOut" }
                                     }
                                 }}
@@ -214,13 +212,6 @@
 
         const ImageModal = ({ image, onClose }) => {
             if (!image) return null;
-            
-            useEffect(() => {
-                document.body.style.overflow = 'hidden';
-                return () => {
-                    document.body.style.overflow = '';
-                };
-            }, []);
 
             return (
                 <AnimatePresence>
@@ -252,13 +243,6 @@
         const ProjectModal = ({ project, onClose }) => {
             if (!project) return null;
 
-            useEffect(() => {
-                document.body.style.overflow = 'hidden';
-                return () => {
-                    document.body.style.overflow = '';
-                };
-            }, []);
-
             return (
                 <motion.div 
                     initial={{ opacity: 0, y: 20 }}
@@ -282,11 +266,7 @@
                     {project.content && (
                         <div className="w-full flex flex-col">
                             <div className="w-full">
-                                <img 
-                                    src={project.content.images[0]} 
-                                    alt={`${project.title} 1`} 
-                                    className="w-full h-auto block" 
-                                />
+                                <img src={project.content.images[0]} alt={`${project.title} 1`} className="w-full h-auto block" />
                             </div>
 
                             <div className="w-full px-6 py-24 md:py-32 flex justify-center bg-[#050505]">
@@ -300,31 +280,18 @@
                             <div className="w-full flex flex-col gap-4 md:gap-8 pb-32">
                                 {project.content.images.slice(1).map((img, i) => (
                                     <div key={i} className="w-full">
-                                        <img 
-                                            src={img} 
-                                            alt={`${project.title} ${i+2}`} 
-                                            loading="lazy"
-                                            className="w-full h-auto block" 
-                                        />
+                                        <img src={img} alt={`${project.title} ${i+2}`} loading="lazy" className="w-full h-auto block" />
                                     </div>
                                 ))}
                             </div>
                             
                             <div className="w-full flex flex-col items-center gap-6 pb-32">
                                 {project.content.link && (
-                                    <a 
-                                        href={project.content.link}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="interactive-trigger text-white text-sm uppercase tracking-widest hover:text-neutral-400 transition-colors border-b border-white hover:border-neutral-400 pb-1"
-                                    >
+                                    <a href={project.content.link} target="_blank" rel="noopener noreferrer" className="interactive-trigger text-white text-sm uppercase tracking-widest hover:text-neutral-400 transition-colors border-b border-white hover:border-neutral-400 pb-1">
                                         VER MÁS
                                     </a>
                                 )}
-                                <button 
-                                    onClick={onClose} 
-                                    className="interactive-trigger text-neutral-500 text-xs md:text-sm uppercase tracking-widest hover:text-white transition-colors border-b border-neutral-800 hover:border-white pb-1"
-                                >
+                                <button onClick={onClose} className="interactive-trigger text-neutral-500 text-xs md:text-sm uppercase tracking-widest hover:text-white transition-colors border-b border-neutral-800 hover:border-white pb-1">
                                     VOLVER
                                 </button>
                             </div>
@@ -357,11 +324,14 @@
                     className="project-card-trigger group relative w-full aspect-[4/5] overflow-hidden bg-neutral-900 border border-neutral-900 hover:border-neutral-700 transition-colors"
                 >
                     <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500 z-10"></div>
-                    <img 
+                    <motion.img 
                         src={imageUrl} 
                         alt={project.title} 
                         loading="lazy"
-                        className="w-full h-full object-cover grayscale group-hover:grayscale-0 scale-100 group-hover:scale-105 transition-all duration-700 ease-out"
+                        initial={{ filter: "grayscale(100%)" }}
+                        whileInView={{ filter: "grayscale(0%)" }}
+                        viewport={{ margin: "-25% 0px -25% 0px", once: false }}
+                        className="w-full h-full object-cover md:!filter-none md:grayscale md:group-hover:grayscale-0 scale-100 group-hover:scale-105 transition-all duration-700 ease-out"
                     />
                     <div className="absolute bottom-0 left-0 w-full p-6 z-20 translate-y-4 group-hover:translate-y-0 transition-transform duration-500 bg-gradient-to-t from-black/80 to-transparent">
                         <div className="flex justify-between items-end overflow-hidden">
@@ -399,7 +369,7 @@
         const ArchiveItem = ({ item, isExpanded, onToggle, onImageClick }) => (
             <div className="border-b border-neutral-900 hover:border-neutral-700 transition-colors">
                 <div 
-                    className="archive-item group flex items-center justify-between py-4 cursor-none"
+                    className="archive-item group flex flex-col md:flex-row md:items-center justify-between py-4 cursor-none gap-2 md:gap-0"
                     onClick={onToggle}
                 >
                     <div className="flex items-center gap-4">
@@ -411,7 +381,7 @@
                             <p className="text-[10px] uppercase tracking-widest text-neutral-600">{item.category}</p>
                         </div>
                     </div>
-                    <span className="text-xs text-neutral-500 font-mono hidden md:block">{item.role}</span>
+                    <span className="text-[10px] md:text-xs text-neutral-500 font-mono text-left md:text-right pl-12 md:pl-0">{item.role}</span>
                 </div>
                 
                 <motion.div 
@@ -455,24 +425,17 @@
             const [expandedArchiveIndex, setExpandedArchiveIndex] = useState(null);
             const [fullscreenImage, setFullscreenImage] = useState(null);
 
+            // Efecto global para manejar el scroll y evitar que se freezee la vista
+            useEffect(() => {
+                if (activeProject || fullscreenImage) {
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    document.body.style.overflow = '';
+                }
+                return () => { document.body.style.overflow = ''; };
+            }, [activeProject, fullscreenImage]);
+
             const identityProjects = [
-                { 
-                    title: "MANGIA FRESCO", 
-                    category: "Identidad / Manual de marca", 
-                    image: "https://raw.githubusercontent.com/graficojordan/portfolio-data/main/mangia-0.jpg",
-                    content: {
-                        link: "https://www.behance.net/gallery/192867745/Mangia-Fresco-Manual-de-marca",
-                        text: "Mangia Fresco es una fábrica de pastas boutique en el corazón de Barrio Martin. El proyecto consistió en transformar la imagen clásica del rubro en una estética depurada y sugestiva. La lógica del sistema fue diseñada para mezclar lo tradicional y lo premium, apuntando directo a un target que valora los detalles del mundo gastro preferencial y lo que consume el barrio.",
-                        images: [
-                            "https://raw.githubusercontent.com/graficojordan/portfolio-data/main/mangia-1.jpg",
-                            "https://raw.githubusercontent.com/graficojordan/portfolio-data/main/mangia-2.jpg",
-                            "https://raw.githubusercontent.com/graficojordan/portfolio-data/main/mangia-3.jpg",
-                            "https://raw.githubusercontent.com/graficojordan/portfolio-data/main/mangia-4.jpg",
-                            "https://raw.githubusercontent.com/graficojordan/portfolio-data/main/mangia-5.jpg",
-                            "https://raw.githubusercontent.com/graficojordan/portfolio-data/main/mangia-6.jpg"
-                        ]
-                    }
-                },
                 { 
                     title: "CUYACÍ", 
                     category: "Identidad / Packaging", 
@@ -490,6 +453,23 @@
                         ]
                     }
                 },
+                { 
+                    title: "MANGIA FRESCO", 
+                    category: "Identidad / Manual de marca", 
+                    image: "https://raw.githubusercontent.com/graficojordan/portfolio-data/main/mangia-0.jpg",
+                    content: {
+                        link: "https://www.behance.net/gallery/192867745/Mangia-Fresco-Manual-de-marca",
+                        text: "Mangia Fresco es una fábrica de pastas boutique en el corazón de Barrio Martin. El proyecto consistió en transformar la imagen clásica del rubro en una estética depurada y sugestiva. La lógica del sistema fue diseñada para mezclar lo tradicional y lo premium, apuntando directo a un target que valora los detalles del mundo gastro preferencial y lo que consume el barrio.",
+                        images: [
+                            "https://raw.githubusercontent.com/graficojordan/portfolio-data/main/mangia-1.jpg",
+                            "https://raw.githubusercontent.com/graficojordan/portfolio-data/main/mangia-2.jpg",
+                            "https://raw.githubusercontent.com/graficojordan/portfolio-data/main/mangia-3.jpg",
+                            "https://raw.githubusercontent.com/graficojordan/portfolio-data/main/mangia-4.jpg",
+                            "https://raw.githubusercontent.com/graficojordan/portfolio-data/main/mangia-5.jpg",
+                            "https://raw.githubusercontent.com/graficojordan/portfolio-data/main/mangia-6.jpg"
+                        ]
+                    }
+                }
             ];
             
             const webProjects = [
@@ -519,11 +499,14 @@
                         <ProjectModal project={activeProject} onClose={() => setActiveProject(null)} />
                     )}
                     
-                    <nav className="fixed top-0 left-0 w-full z-50 px-4 py-6 md:px-12 md:py-8 flex justify-between items-start mix-blend-difference text-white">
-                        <div className="flex flex-col">
-                            <span className="text-xl font-bold tracking-tighter uppercase interactive-text">JT—</span>
-                        </div>
-                        <div className="hidden md:flex flex-col text-right gap-1 text-[10px] uppercase tracking-widest">
+                    {/* Header Independiente: Logo absoluto (scrollea) */}
+                    <div className="absolute top-0 left-0 w-full z-40 px-4 py-6 md:px-12 md:py-8 pointer-events-none mix-blend-difference text-white">
+                        <span className="text-xl font-bold tracking-tighter uppercase interactive-text pointer-events-auto">JT—</span>
+                    </div>
+
+                    {/* Header Independiente: Navegación fija */}
+                    <nav className="fixed top-0 right-0 z-50 px-4 py-6 md:px-12 md:py-8 mix-blend-difference text-white pointer-events-none">
+                        <div className="flex flex-col text-right gap-1 text-[10px] uppercase tracking-widest pointer-events-auto">
                             <a href="#work" className="hover:text-neutral-400 transition-colors project-card-trigger">Proyectos</a>
                             <a href="#archive" className="hover:text-neutral-400 transition-colors project-card-trigger">Música</a>
                             <a href="#contact" className="hover:text-neutral-400 transition-colors project-card-trigger">Contacto</a>
@@ -537,7 +520,7 @@
                                 <span className="text-xs uppercase tracking-widest text-neutral-500 text-right">Rosario, Santa Fe<br/>Argentina</span>
                             </div>
 
-                            <div className="flex flex-col justify-center flex-grow py-8 md:py-12 relative z-20">
+                            <div className="flex flex-col justify-center flex-grow py-12 md:py-16 relative z-20 gap-4 md:gap-0">
                                 <NebulaText 
                                     text="JORDÁN" 
                                     justify="justify-start" 
@@ -545,13 +528,13 @@
                                     delayOffset={0} 
                                 />
                                 
-                                <div className="flex flex-col md:flex-row justify-between items-start md:items-center py-4 md:py-8 border-y border-white/10 my-4 md:my-0">
-                                    <div className="flex gap-4 md:gap-8 text-xs md:text-sm uppercase tracking-widest text-neutral-400">
+                                <div className="flex flex-col md:flex-row justify-between items-center py-6 md:py-8 border-y border-white/10 my-2 md:my-0 gap-6 md:gap-0">
+                                    <div className="flex flex-wrap justify-center md:justify-start gap-4 md:gap-8 text-xs md:text-sm uppercase tracking-widest text-neutral-400 w-full md:w-auto">
                                         <span>(01) Branding</span>
                                         <span>(02) Web</span>
                                         <span>(03) Otros</span>
                                     </div>
-                                    <div className="hidden md:block"><SpinningBadge /></div>
+                                    <div className="block"><SpinningBadge /></div>
                                 </div>
 
                                 <NebulaText 
@@ -564,9 +547,7 @@
 
                             <div className="flex justify-between items-end pb-8">
                                 <div className="max-w-md hidden md:block">
-                                    <p className="text-sm text-neutral-400 leading-relaxed">
-                                        
-                                    </p>
+                                    <p className="text-sm text-neutral-400 leading-relaxed"></p>
                                 </div>
                                 <motion.a 
                                     href="#work"
@@ -583,7 +564,8 @@
                     <div className="w-full py-4 md:py-6 border-y border-neutral-800 bg-[#050505] relative z-20 overflow-hidden">
                         <div className="marquee-container">
                             <div className="marquee-content text-4xl md:text-6xl font-bold uppercase text-neutral-800 tracking-tighter">
-                                VIBECODING — IDENTIDAD — SISTEMAS — NARRATIVA — VISUALES — DIRECCIÓN DE ARTE — VIBECODING — IDENTIDAD — SISTEMAS — NARRATIVA — VISUALES — DIRECCIÓN DE ARTE — VIBECODING — IDENTIDAD — SISTEMAS — NARRATIVA — VISUALES — DIRECCIÓN DE ARTE —
+                                <span>VIBECODING — IDENTIDAD — SISTEMAS — NARRATIVA — VISUALES — DIRECCIÓN DE ARTE — VIBECODING — IDENTIDAD — SISTEMAS — NARRATIVA — VISUALES — DIRECCIÓN DE ARTE —&nbsp;</span>
+                                <span>VIBECODING — IDENTIDAD — SISTEMAS — NARRATIVA — VISUALES — DIRECCIÓN DE ARTE — VIBECODING — IDENTIDAD — SISTEMAS — NARRATIVA — VISUALES — DIRECCIÓN DE ARTE —&nbsp;</span>
                             </div>
                         </div>
                     </div>
