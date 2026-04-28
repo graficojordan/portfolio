@@ -75,7 +75,6 @@
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         .spin-text { animation: spin 10s linear infinite; }
 
-        /* FIX MOBILE: Ocultar custom cursor en dispositivos touch */
         @media (pointer: coarse) {
             .custom-cursor { display: none !important; }
             body, a, button, .interactive-trigger, .project-card-trigger, .archive-item, iframe { cursor: auto !important; }
@@ -169,7 +168,7 @@
                     <path id="circlePath" d="M 50, 50 m -37, 0 a 37,37 0 1,1 74,0 a 37,37 0 1,1 -74,0" fill="transparent" />
                     <text fill="white" fontSize="11" fontWeight="bold" letterSpacing="2">
                         <textPath href="#circlePath" startOffset="0%">
-                           MADE   IN    ROSAGASARIO — ARG —
+                           BASED   IN    ROSAGASARIO — ARG —
                         </textPath>
                     </text>
                 </svg>
@@ -199,7 +198,7 @@
                                 variants={{
                                     hidden: { 
                                         opacity: 0, filter: 'blur(20px)', x: dx, y: dy, scale: 0.2,
-                                        transition: { duration: 0.8, ease: "easeOut" } // FIX: Transición de salida más suave
+                                        transition: { duration: 0.8, ease: "easeOut" }
                                     },
                                     visible: { 
                                         opacity: 1, filter: 'blur(0px)', x: 0, y: 0, scale: 1,
@@ -286,6 +285,22 @@
                                 </div>
                             </div>
 
+                            {project.content.video && (
+                                <div className="w-full pb-16 md:pb-24 px-4 md:px-0 flex justify-center">
+                                    <div className="w-full">
+                                        <video 
+                                            src={project.content.video} 
+                                            autoPlay 
+                                            loop 
+                                            muted 
+                                            playsInline 
+                                            controls
+                                            className="w-full h-auto block"
+                                        />
+                                    </div>
+                                </div>
+                            )}
+
                             <div className="w-full flex flex-col gap-4 md:gap-8 pb-32">
                                 {project.content.images.slice(1).map((img, i) => (
                                     <div key={i} className="w-full">
@@ -314,7 +329,6 @@
             const [isTouch, setIsTouch] = useState(false);
 
             useEffect(() => {
-                // Detecta si es un dispositivo touch al cargar
                 setIsTouch(window.matchMedia("(pointer: coarse)").matches);
             }, []);
 
@@ -340,7 +354,6 @@
                     className="project-card-trigger group relative w-full aspect-[4/5] overflow-hidden bg-neutral-900 border border-neutral-900 hover:border-neutral-700 transition-colors"
                 >
                     <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500 z-10"></div>
-                    {/* FIX: Se separa la lógica Framer Motion para mobile vs Tailwind hover puro para desktop */}
                     <motion.img 
                         src={imageUrl} 
                         alt={project.title} 
@@ -459,6 +472,7 @@
                     content: {
                         link: "https://www.behance.net/gallery/233285105/Cuyaci-Diseno-de-packaging",
                         text: "Con Cuyací, el desafío fue diseñar una línea de packaging que respire tradición sin caer en dicotomías, al traer lo ancestral a un producto pensado para producción masiva. El centro del proyecto fue la identidad narrativa y visual, desarrollada a partir de grabados en madera en pos de lograr la estética rústica y orgánica que el producto pedía. Buscamos que cada envase funcione como parte de una familia coherente, pero con sus propios matices, integrando además una experiencia conceptual expandible a través de contenido audiovisual.",
+                        video: "https://raw.githubusercontent.com/graficojordan/portfolio-data/main/CUYACI_FN.mp4",
                         images: [
                             "https://raw.githubusercontent.com/graficojordan/portfolio-data/main/cuyaci-1.jpg",
                             "https://raw.githubusercontent.com/graficojordan/portfolio-data/main/cuyaci-2.jpg",
@@ -489,7 +503,7 @@
             ];
             
             const webProjects = [
-                { title: "FORBICE", category: "Web / CORPORATIVO", image: "https://raw.githubusercontent.com/graficojordan/portfolio-data/main/web-forbice.jpg", externalLink: "https://forbice.github.io/web/" },
+                { title: "FORBICE CONSTRUCCIONES", category: "Web / CORPORATIVO", image: "https://raw.githubusercontent.com/graficojordan/portfolio-data/main/web-forbice.jpg", externalLink: "https://forbice.github.io/web/" },
                 { title: "LABCELL", category: "RRSS / CORPORATIVO", image: "https://raw.githubusercontent.com/graficojordan/portfolio-data/main/web-labcell.jpg", externalLink: "https://www.behance.net/gallery/192872247/Labcell-Identidad" },
             ];
             
@@ -595,7 +609,7 @@
                             <div className="md:col-span-4">
                                 <h3 className="text-xl font-bold uppercase tracking-tight mb-4 text-white">Música y Visualidades</h3>
                                 <p className="text-neutral-500 text-sm leading-relaxed max-w-sm">
-                                    Diseño y dirección de artes visuales en la escena rosarina.
+                                    Diseño y dirección de artes visuales en co-labor con la escena rosarina independiente.
                                 </p>
                             </div>
                             <div className="md:col-span-8">
