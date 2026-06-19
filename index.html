@@ -7,14 +7,17 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Piazzolla:ital,opsz,wght@0,8..30,300;0,8..30,400;0,8..30,500;0,8..30,600;1,8..30,300;1,8..30,400;1,8..30,500&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <script src="https://cdn.tailwindcss.com/3.4.4"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: { sans: ['"Space Grotesk"', 'sans-serif'] },
+                    fontFamily: { 
+                        sans: ['"Space Grotesk"', 'sans-serif'],
+                        serif: ['"Piazzolla"', 'serif'] 
+                    },
                     colors: { neutral: { 900: '#171717', 800: '#262626' } }
                 }
             }
@@ -88,7 +91,6 @@
     <script type="text/babel" data-presets="react,env">
         const { useState, useEffect, useRef } = React;
         const { createRoot } = ReactDOM;
-        // Agregamos un chequeo de seguridad por si Motion tarda en cargar
         const MotionLib = window.Motion || window.FramerMotion || {};
         const { motion, useScroll, useTransform, useMotionValue, useSpring, AnimatePresence } = MotionLib;
 
@@ -284,10 +286,11 @@
                             </div>
 
                             <div className="w-full px-6 py-24 md:py-32 flex justify-center bg-[#050505]">
-                                <div className="max-w-3xl w-full text-left">
-                                    <p className="text-neutral-300 text-lg md:text-2xl leading-relaxed font-light">
+                                {/* MODIFICACIÓN EDITORIAL: Centramos un div con max-width y dentro procesamos los párrafos espaciados */}
+                                <div className="max-w-3xl w-full flex justify-start md:justify-center">
+                                    <div className="font-serif text-neutral-300 text-left text-base md:text-lg lg:text-[22px] leading-[1.8] font-light max-w-[60ch] space-y-6">
                                         {project.content.text}
-                                    </p>
+                                    </div>
                                 </div>
                             </div>
 
@@ -477,7 +480,12 @@
                     image: "https://raw.githubusercontent.com/graficojordan/portfolio-data/main/cuyaci-0.jpg",
                     content: {
                         link: "https://www.behance.net/gallery/233285105/Cuyaci-Diseno-de-packaging",
-                        text: "Con Cuyací, el desafío fue proyectar un sistema de packaging que dialogue con la raíz sin anclarse en el pasado, traduciendo lo ancestral a una escala masiva. El eje del proyecto es una identidad de impronta manual desarrollada a partir de grabados en madera, que aportan la crudeza y el gesto orgánico que el producto exigía. Buscamos una armonía sistémica abierta donde cada pieza conserva su singularidad y combina narrativas que desbordan el envase a través de experiencias audiovisuales.",
+                        // TEXTOS PARTIDOS EN PÁRRAFOS (<P>) Y CON ANTI-VIUDAS AL FINAL
+                        text: <>
+                            <p>Con <strong>Cuyací</strong>, el desafío fue proyectar un sistema de packaging que dialogue con la raíz <em>sin anclarse en el pasado</em>, traduciendo lo ancestral a una escala&nbsp;masiva.</p>
+                            <p>El eje del proyecto es una identidad de impronta manual desarrollada a partir de grabados en madera, que aportan la crudeza y el gesto orgánico que el producto&nbsp;exigía.</p>
+                            <p>Buscamos una armonía sistémica abierta donde cada pieza conserva su singularidad y combina narrativas que desbordan el envase a través de experiencias&nbsp;audiovisuales.</p>
+                        </>,
                         video: "https://raw.githubusercontent.com/graficojordan/portfolio-data/main/CUYACI_FN.mp4",
                         images: [
                             "https://raw.githubusercontent.com/graficojordan/portfolio-data/main/cuyaci-1.jpg",
@@ -495,7 +503,12 @@
                     image: "https://raw.githubusercontent.com/graficojordan/portfolio-data/main/mangia-0.jpg",
                     content: {
                         link: "https://www.behance.net/gallery/192867745/Mangia-Fresco-Manual-de-marca",
-                        text: "Mangia Fresco es una fábrica de pastas boutique en el corazón de Barrio Martin. El proyecto consistió en transformar la imagen clásica del rubro en una estética depurada de elementos invasivos. La lógica del sistema fue diseñada para mezclar lo tradicional y lo premium, apuntando a un target que valora los detalles curados del mundo gastro de especialidad y la jerarquía de la producción nacional.",
+                        // TEXTOS PARTIDOS EN PÁRRAFOS (<P>) Y CON ANTI-VIUDAS AL FINAL
+                        text: <>
+                            <p><strong>Mangia Fresco</strong> es una fábrica de pastas boutique en el corazón de Barrio&nbsp;Martin.</p>
+                            <p>El proyecto consistió en transformar la imagen clásica del rubro en una estética depurada de elementos&nbsp;invasivos.</p>
+                            <p>La lógica del sistema fue diseñada para mezclar lo tradicional y lo premium, apuntando a un target que valora los detalles curados del mundo gastro de especialidad y la jerarquía de la producción&nbsp;nacional.</p>
+                        </>,
                         images: [
                             "https://raw.githubusercontent.com/graficojordan/portfolio-data/main/mangia-1.jpg",
                             "https://raw.githubusercontent.com/graficojordan/portfolio-data/main/mangia-2.jpg",
@@ -626,8 +639,9 @@
                         <div className="max-w-[1920px] mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12">
                             <div className="md:col-span-4">
                                 <h3 className="text-xl font-bold uppercase tracking-tight mb-4 text-white">Música y Visualidades</h3>
-                                <p className="text-neutral-500 text-sm leading-relaxed max-w-sm">
-                                    Diseño y dirección de artes visuales en co-labor con la escena rosarina independiente.
+                                {/* AJUSTE EN ARCHIVE: ALINEADO A LA IZQUIERDA Y ANTI-VIUDAS */}
+                                <p className="font-serif text-neutral-400 text-left text-base md:text-[17px] leading-[1.7] max-w-[60ch]">
+                                    Diseño y dirección de artes visuales en <em>co-labor</em> con la escena&nbsp;independiente.
                                 </p>
                             </div>
                             <div className="md:col-span-8">
@@ -649,9 +663,10 @@
                     <footer id="contact" className="relative z-10 px-4 md:px-12 py-16 md:py-32 min-h-[70vh] flex flex-col justify-between border-t border-neutral-800 bg-[#050505]">
                         <div>
                             <div className="mb-16 md:mb-32 max-w-sm">
-                                <p className="text-sm text-neutral-500 leading-relaxed">
-                                    Creo en una metodología de trabajo flexible y ágil. <br className="hidden md:block"/>
-                                    Dinámicas a medida para cada proyecto, basado en la motivación y la cultura de proyecto.
+                                {/* AJUSTE EN FOOTER: ALINEADO A LA IZQUIERDA Y ANTI-VIUDAS */}
+                                <p className="font-serif text-left text-base md:text-[17px] text-neutral-400 leading-[1.7] max-w-[60ch]">
+                                    Creo en una metodología de trabajo <em>flexible y ágil</em>. <br className="hidden md:block"/>
+                                    Dinámicas a medida para cada proyecto, basado en la <strong>motivación y la cultura de&nbsp;proyecto</strong>.
                                 </p>
                             </div>
 
